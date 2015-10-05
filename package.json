@@ -1,0 +1,10 @@
+{
+  "name": "BreakPong",
+  "version": "0.0.0",
+  "description": "BreakPong",
+  "main": "app.js",
+  "author": {
+    "name": "Tyler",
+    "email": ""
+  }
+}
