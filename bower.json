@@ -1,0 +1,28 @@
+{
+  "name": "BreakPong",
+  "version": "0.0.0",
+  "description": "A hybrid pong-like game.",
+  "main": "app.js",
+  "moduleType": [],
+  "keywords": [
+    "pong",
+    "breakout"
+  ],
+  "authors": [
+    "Tyler Coles",
+    "Elton Ray"
+  ],
+  "license": "MIT",
+  "homepage": "http://pongbreak.atomicham.net/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#~1.4.7"
+  }
+}
