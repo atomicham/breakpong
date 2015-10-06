@@ -69,13 +69,20 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
     IF !ERRORLEVEL! NEQ 0 goto error
   )
 
+  IF EXIST "%DEPLOYMENT_TEMP%\__bowerVersion.tmp" (
+	SET /p BOWER_JS_PATH=<"%DEPLOYMENT_TEMP%\__bowerVersion.tmp"
+	IF !ERRORLEVEL! NEQ 0 goto error
+  )
+
   IF NOT DEFINED NODE_EXE (
     SET NODE_EXE=node
   )
 
   SET NPM_CMD="!NODE_EXE!" "!NPM_JS_PATH!"
+  SET BOWER_CMD="!NODE_EXE!" "!BOWER_JS_PATH!"
 ) ELSE (
   SET NPM_CMD=npm
+  SET BOWER_CMD=bower
   SET NODE_EXE=node
 )
 
