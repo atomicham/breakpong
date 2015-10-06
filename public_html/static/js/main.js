@@ -7,3 +7,11 @@ pongBreakApp.controller('pongBreakMasterController', function pongBreakMasterCon
 pongBreakApp.controller('pongBreakLobbyController', function pongBreakLobbyController() {
 
 });
+
+pongBreakApp.controller('pongBreakGameController', function pongBreakLobbyController() {
+
+});
+
+pongBreakApp.controller('pongBreakAccountController', function pongBreakLobbyController() {
+
+});
