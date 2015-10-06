@@ -1,17 +1,36 @@
-﻿var pongBreakApp = angular.module('pongBreakApp', []);
+﻿var pongBreakApp = angular.module('pongBreakApp', ['ngRoute']);
 
-pongBreakApp.controller('pongBreakMasterController', function pongBreakMasterController() {
+pongBreakApp.config(['$routeProvider', function ($routeProvider) {
+		$routeProvider.
+		when('/lobby', {
+			templateUrl: 'static/app/views/lobby.html',
+			controller: 'lobbyController'
+		})
+		.when('/account', {
+			templateUrl: 'static/app/views/account.html',
+			controller: 'accountController'
+		})
+		.when('/game', {
+			templateUrl: 'static/app/views/game.html',
+			controller: 'gameController'
+		})
+		.otherwise({
+			redirectTo: '/lobby'
+		});
+}]);
+
+pongBreakApp.controller('masterController', function pongBreakMasterController() {
 
 });
 
-pongBreakApp.controller('pongBreakLobbyController', function pongBreakLobbyController() {
+pongBreakApp.controller('lobbyController', function pongBreakLobbyController() {
 
 });
 
-pongBreakApp.controller('pongBreakGameController', function pongBreakLobbyController() {
+pongBreakApp.controller('gameController', function pongBreakLobbyController() {
 
 });
 
-pongBreakApp.controller('pongBreakAccountController', function pongBreakLobbyController() {
+pongBreakApp.controller('accountController', function pongBreakLobbyController() {
 
 });
