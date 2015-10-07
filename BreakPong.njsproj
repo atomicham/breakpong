@@ -8,6 +8,8 @@
     <NodejsPort>1337</NodejsPort>
     <DebuggerPort>5858</DebuggerPort>
     <LaunchUrl>http://localhost:1337</LaunchUrl>
+    <Environment>
+    </Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -34,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="modules\chat.js" />
+    <Content Include="public_html\static\js\chat.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.min.js" />
     <Content Include="public_html\static\vendor\angular-route\index.js" />
@@ -64,6 +68,7 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="modules\" />
     <Folder Include="public_html\" />
     <Folder Include="public_html\static\" />
     <Folder Include="public_html\static\app\views\" />
