@@ -1,0 +1,17 @@
+{
+  "name": "BreakPong",
+  "version": "0.0.0",
+  "description": "BreakPong",
+  "main": "app.js",
+  "author": {
+    "name": "Tyler",
+    "email": "nazhrenn@gmail.com"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.7"
+  },
+  "devDependencies": {
+    "bower": "^1.5.3"
+  }
+}
