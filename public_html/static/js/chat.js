@@ -11,9 +11,18 @@
 	}
 
 	send.click(function () {
-		socket.emit('client msg', text.val());
-		text.val('');
+		var value = text.val();
+		if (!!value && !!value.trim()) {
+			socket.emit('client msg', value);
+			text.val('');
+		}
 		return false;
+	});
+
+	text.keyup(function (e) {
+		if (e.keyCode == 13) {
+			send.click();
+		}
 	});
 
 	socket.on('serv msg', function (msg) {

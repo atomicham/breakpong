@@ -2,39 +2,86 @@ body {
 	width: 100%;
 }
 
+.menu {
+	list-style: none;
+}
+
+	.menu li {
+		display: inline;
+	}
+
+	.menu li + li:before {
+		content: " | ";
+	}
+
+.viewArea {
+	margin: 0 auto;
+	width: 50%;
+	min-width: 500px;
+}
+
+.game {
+	height: 360px;
+	width: 100%;
+}
+
+.game canvas {
+	margin: 0 auto;
+	width: 500px;
+}
+
+.lobby {
+	height: 360px;
+}
+
+.account {
+	height: 640px;
+}
+
 .chatContainer {
 	margin: 0 auto;
-	min-width: 500px;
 	min-height: 300px;
-	width: 50%;
-	background-color: lightgray;
-}
-.chatContainer ul.chatBox {
-	min-height: 255px;
-	list-style: none;
-	overflow-y: scroll;
-	padding: 5px;
-}
-
-.chatContainer .chatControls {
 	width: 100%;
-	min-height: 40px;
-	vertical-align: middle;
+	background-color: lightgray;
+	font-family: sans-serif;
 }
 
-.chatContainer .chatControls #chatText {
-	float: left;
-	min-width: 400px;
-	margin-left: 5px;
-	width: 80%;
-	height: 30px;
-	font-size: 24px;
-}
+	.chatContainer ul.chatBox {
+		min-height: 255px;
+		list-style: none;
+		overflow-y: scroll;
+		padding: 0;
+		margin: 0;
+	}
 
-.chatContainer .chatControls #chatSend {
-	float: right;
-	margin-top: 5px;
-	margin-right: 5px;
-	width: 80px;
-	height: 30px;
-}
+		.chatContainer ul.chatBox li {
+			padding: 5px;
+		}
+
+			.chatContainer ul.chatBox li:nth-child(even) {
+				background: #eee;
+			}
+
+	.chatContainer .chatControls {
+		width: 100%;
+		min-height: 40px;
+		vertical-align: middle;
+	}
+
+		.chatContainer .chatControls #chatText {
+			float: left;
+			min-width: 400px;
+			margin-left: 5px;
+			margin-top: 4px;
+			width: 80%;
+			height: 30px;
+			font-size: 24px;
+		}
+
+		.chatContainer .chatControls #chatSend {
+			float: right;
+			margin-top: 5px;
+			margin-right: 5px;
+			width: 80px;
+			height: 30px;
+		}
