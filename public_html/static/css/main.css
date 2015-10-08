@@ -2,11 +2,46 @@ body {
 	width: 100%;
 }
 
+.menu {
+	list-style: none;
+}
+
+	.menu li {
+		display: inline;
+	}
+
+	.menu li + li:before {
+		content: " | ";
+	}
+
+.viewArea {
+	margin: 0 auto;
+	width: 50%;
+	min-width: 500px;
+}
+
+.game {
+	height: 360px;
+	width: 100%;
+}
+
+.game canvas {
+	margin: 0 auto;
+	width: 500px;
+}
+
+.lobby {
+	height: 360px;
+}
+
+.account {
+	height: 640px;
+}
+
 .chatContainer {
 	margin: 0 auto;
-	min-width: 500px;
 	min-height: 300px;
-	width: 50%;
+	width: 100%;
 	background-color: lightgray;
 	font-family: sans-serif;
 }
