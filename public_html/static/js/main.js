@@ -32,21 +32,27 @@ pongBreakApp.config(['$routeProvider', function ($routeProvider) {
 	});
 }]);
 
-pongBreakApp.controller('masterController', function pongBreakMasterController() {
+pongBreakApp.controller('masterController', ['$scope', function pongBreakMasterController($scope) {
+	$scope.toggleChat = function (show) {
+		if (show) {
+			$("#chatWindow").show();
+		} else {
+			$("#chatWindow").hide();
+		}
+	};
+}]);
 
-});
+pongBreakApp.controller('lobbyController', ['$scope', function pongBreakLobbyController($scope) {
+	$scope.toggleChat(true);
+}]);
 
-pongBreakApp.controller('lobbyController', function pongBreakLobbyController() {
+pongBreakApp.controller('gameController', ['$scope', function pongBreakLobbyController($scope) {
+	$scope.toggleChat(true);
+}]);
 
-});
-
-pongBreakApp.controller('gameController', function pongBreakLobbyController() {
-
-});
-
-pongBreakApp.controller('accountController', function pongBreakLobbyController() {
-
-});
+pongBreakApp.controller('accountController', ['$scope', function pongBreakLobbyController($scope) {
+	$scope.toggleChat(false);
+}]);
 
 pongBreakApp.controller('chatController', function chatController() {
 
