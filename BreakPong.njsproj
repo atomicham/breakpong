@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="modules\chat.js" />
+    <Content Include=".travis.yml" />
     <Content Include="public_html\static\js\chat.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.min.js" />
