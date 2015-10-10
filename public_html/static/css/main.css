@@ -1,5 +1,8 @@
 body {
 	width: 100%;
+	background-color:black;
+	color: white;
+	font-family: 'Share Tech Mono';
 }
 
 .menu {
