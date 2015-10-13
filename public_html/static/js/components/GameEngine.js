@@ -1,6 +1,6 @@
 
 var GameEngine = Class.extend({
-	displayWidth: 500,
+	displayWidth: 640,
 	displayHeight: 300,
 	physicsUpdateInterval : 20,
 	displayUpdateInterval: 40,
@@ -55,7 +55,7 @@ var GameEngine = Class.extend({
 		this.p2Paddle.addComponent(new Color());
 		
 		this.canvasContainer = canvasContainer;
-		this.displaySystem = new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayWidth);
+		this.displaySystem = new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
 		this.physicsSystem = new PhysicsSystem(this.physicsUpdateInterval);
 	},
 	
