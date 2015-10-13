@@ -6,8 +6,7 @@ var Entity = Class.extend({
 
     init : function()
     {
-        this.id = this.guid(components);
-        this.components = components;
+        this.id = this.guid();
         // this._super();
     },
 
@@ -22,5 +21,15 @@ var Entity = Class.extend({
             result += basis.charAt(Math.floor(Math.random() * basis.length));
         }
         return result;
+    },
+    
+    getComponents: function()
+    {
+        return this.components;
+    },
+
+    addComponent : function(component)
+    {
+        this.components.push(component);
     }
 });

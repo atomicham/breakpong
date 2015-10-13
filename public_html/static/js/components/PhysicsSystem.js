@@ -6,7 +6,8 @@ var PhysicsSystem = System.extend({
         this._super(components, intervalPeriod);
     },
 
-    action : function(component){
+    action: function (component) {
+        // check for collisions,
         // update positions for each applicable component
     }
 });

@@ -22,7 +22,7 @@ var System = Class.extend({
     },
 
     processComponents: function (entity) {
-        var components = entities.components;
+        var components = entity.getComponents();
         var length = components.length;
 
         for (var i = 0; i < length; i++) {

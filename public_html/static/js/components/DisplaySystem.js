@@ -6,11 +6,11 @@ var DisplaySystem = System.extend({
     canvasContainer: null,
     canvas: null,
 
-    init: function (components, intervalPeriod, canvasContainer, displayWidth, displayWidth) {
+    init: function (components, intervalPeriod, canvasContainer, displayWidth, displayHeight) {
         this.displayWidth = displayWidth;
         this.displayHeight = displayHeight;
         this.canvasContainer = canvasContainer;
-        this.canvas = new TwoDCanvas(this.canvasContainer, this.displayWidth, this.displayWidth);
+        this.canvas = new TwoDCanvas(this.canvasContainer, this.displayWidth, this.displayHeight);
         this.componentClasses = ["Ball", "Paddle", "Score", "SideWall", "BackWall", "Net"];
         this._super(components, intervalPeriod);
     },
@@ -20,7 +20,7 @@ var DisplaySystem = System.extend({
     },
 
     action: function (component) {
-        component.draw();
+        component.draw(this.canvas);
     },
 
     after: function () {

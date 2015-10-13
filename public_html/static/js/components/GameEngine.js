@@ -6,10 +6,10 @@ var GameEngine = Class.extend({
     displayUpdateInterval: 40,
     leftScoreX : 100, 
     leftScoreY : 20,
-    rightScoreX : displayWidth - 100, 
+    rightScoreX : this.displayWidth - 100, 
     rightScoreY: 20,
-    leftPlayerPaddleY: 40,
-    rightPlayerPaddleY: displayWidth - 40,
+    leftPlayerPaddleX: 40,
+    rightPlayerPaddleX: 460,
     ball: null,
     p1Score: null,
     p2Score: null,
@@ -23,19 +23,28 @@ var GameEngine = Class.extend({
     init: function (canvasContainer)
     {
         // create entities
-        this.ball = new Ball();
-        this.entities.push(ball);
-        this.p1Score = new Score(this.leftScoreX, this.leftScoreY);
-        this.p2Score = new Score(this.rightScoreX, this.rightScoreY);
-        this.p1Paddle = new Paddle(this.leftPlayerPaddleY);
-        this.entities.push(p1Paddle);
-        this.p2Paddle = new Paddle(this.rightPlayerPaddleY);
-        this.entities.push(p2Paddle);
+        this.ball = new Entity();
+        this.ball.addComponent(new Ball());
+        this.entities.push(this.ball);
 
-        "Ball", "Paddle", "Score", "SideWall", "BackWall", "Net"
+        this.p1Score = new Entity();
+        this.p1Score.addComponent(new Score(this.leftScoreX, this.leftScoreY));
+        this.entities.push(this.p1Score);
+
+        this.p1Paddle = new Entity();
+        this.p1Paddle.addComponent(new Paddle(this.leftPlayerPaddleX));
+        this.entities.push(this.p1Paddle);
+
+        this.p2Score = new Entity();
+        this.p2Score.addComponent(new Score(this.rightScoreX, this.rightScoreY));
+        this.entities.push(this.p2Score);
+
+        this.p2Paddle = new Entity();
+        this.p2Paddle.addComponent(new Paddle(this.rightPlayerPaddleX));
+        this.entities.push(this.p2Paddle);
 
         this.canvasContainer = canvasContainer;
-        this.displaySystem = new DisplaySystem(this.entities, this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayWidth);
+        this.displaySystem = new DisplaySystem(this.entities, this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
         this.physicsSystem = new PhysicsSystem(this.entities, this.physicsUpdateInterval);
     },
 
