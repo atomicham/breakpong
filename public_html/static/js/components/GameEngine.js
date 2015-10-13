@@ -8,8 +8,8 @@ var GameEngine = Class.extend({
 	leftScoreY : 20,
 	rightScoreX : 0, 
 	rightScoreY: 20,
-	leftPlayerPaddleY: 40,
-	rightPlayerPaddleY: 0,
+	leftPlayerPaddleY: 250,
+	rightPlayerPaddleY: 250,
 	ball: null,
 	p1Score: null,
 	p2Score: null,
@@ -22,13 +22,12 @@ var GameEngine = Class.extend({
 	init: function (canvasContainer) {
 		// init vars
 		this.rightScoreX = this.displayWidth - 100;
-		this.rightPlayerPaddleY = this.displayWidth - 40;
 		
 		// create entities
 		this.ball = System.createEntity();
 		this.ball.addComponent(new Position(250, 250));
 		this.ball.addComponent(new Dimensions(8, 8));
-		this.ball.addComponent(new Velocity(0, 0));
+		this.ball.addComponent(new Velocity(5, 0));
 		this.ball.addComponent(new Collidable());
 		this.ball.addComponent(new Rectangle());
 		this.ball.addComponent(new Color());

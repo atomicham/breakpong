@@ -38,13 +38,14 @@ var Velocity = Component.extend({
 });
 
 var Collidable = Component.extend({
-	name: 'Collidable',
-	collidable: false
+	name: 'Collidable'
 });
 
 var Color = Component.extend({
 	name: 'Color',
-	color: 'white'
+	init: function () {
+		this.color = 'white';
+	}
 });
 
 var Rectangle = Component.extend({
