@@ -1,26 +1,69 @@
 
-var Component = Class.extend({
-    checkForCollisions: false,
+var Component = Class.extend({});
 
-    componentType: "Component",
+// screen coordinates
+var Position = Component.extend({
+	name: 'Position',
+	x: 0, 
+	y: 0,
+	// This field can be used to account for latency. It represents absolute time when this
+	// information was last accurate. Communicating game instances will need to synchronize
+	// their absolute time somehow.
+	timeStamp: 0,
+	init: function (x, y) {
+		this.x = x;
+		this.y = y;
+	}
+});
 
-    // screen coordinates
-    position: { x: 0, y: 0 },
+// pixels / sec
+var Velocity = Component.extend({
+	name: 'Velocity',
+	x: 0, 
+	y: 0,
+	init: function (x, y) {
+		this.x = x;
+		this.y = y;
+	}
+});
 
-    // pixels / sec
-    velocity: { x: 0, y: 0 },
+var Collidable = Component.extend({
+	name: 'Collidable'
+});
 
-    hitBox : {x:0, y:0, width:0, height:0},
+var Ball = Component.extend({
+	name: 'Ball'
+});
 
-    // This field can be used to account for latency. It represents absolute time when this
-    // information was last accurate. Communicating game instances will need to synchronize
-    // their absolute time somehow.
-    timeStamp: 0,
+var GoalZone = Component.extend({
+	name: 'GoalZone'
+});
 
-    init: function () {
-        // this._super();
-    },
+var Color = Component.extend({
+	name: 'Color',
+	init: function (color) {
+		this.color = color || 'white';
+	}
+});
 
-    // override this method to handle when sytem detects collisions (change direction, stop moving, explode, etc...)
-    collision: function () {}
+var Score = Component.extend({
+	name: 'Score',
+	value: 0,
+	init: function () {
+		this.value = 0;
+	}
+});
+
+var Rectangle = Component.extend({
+	name: 'Rectangle',
+	width: 0,
+	height: 0,
+	init: function (width, height) {
+		this.width = width;
+		this.height = height;
+	}
+});
+
+var Text = Component.extend({
+	name: 'Text'
 });
