@@ -30,7 +30,7 @@ body {
 
 .game canvas {
 	margin: 0 auto;
-	width: 500px;
+	width: 640px;
 }
 
 .lobby {
