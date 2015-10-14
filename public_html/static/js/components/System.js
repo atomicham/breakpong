@@ -78,6 +78,10 @@ var System = null;
 		entities.push(entity);
 		return entity;
 	};
+	
+	System.getEntityCount = function $getEntityCount() {
+		return entities.length;
+	};
 
 	System.getEntitiesWithComponents = function $getEntitiesWithComponents(components) {
 		var qualified = [];

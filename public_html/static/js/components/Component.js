@@ -16,16 +16,6 @@ var Position = Component.extend({
 	}
 });
 
-var Dimensions = Component.extend({
-	name: 'Dimensions',
-	width: 0,
-	height: 0,
-	init: function (width, height) {
-		this.width = width;
-		this.height = height;
-	}
-});
-
 // pixels / sec
 var Velocity = Component.extend({
 	name: 'Velocity',
@@ -41,15 +31,37 @@ var Collidable = Component.extend({
 	name: 'Collidable'
 });
 
+var Ball = Component.extend({
+	name: 'Ball'
+});
+
+var GoalZone = Component.extend({
+	name: 'GoalZone'
+});
+
 var Color = Component.extend({
 	name: 'Color',
+	init: function (color) {
+		this.color = color || 'white';
+	}
+});
+
+var Score = Component.extend({
+	name: 'Score',
+	value: 0,
 	init: function () {
-		this.color = 'white';
+		this.value = 0;
 	}
 });
 
 var Rectangle = Component.extend({
-	name: 'Rectangle'
+	name: 'Rectangle',
+	width: 0,
+	height: 0,
+	init: function (width, height) {
+		this.width = width;
+		this.height = height;
+	}
 });
 
 var Text = Component.extend({
