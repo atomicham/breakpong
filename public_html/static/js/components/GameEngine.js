@@ -8,55 +8,90 @@ var GameEngine = Class.extend({
 	leftScoreY : 20,
 	rightScoreX : 0, 
 	rightScoreY: 20,
-	leftPlayerPaddleY: 250,
-	rightPlayerPaddleY: 250,
-	ball: null,
-	p1Score: null,
-	p2Score: null,
-	p1Paddle: null,
-	p2Paddle: null,
 	canvasContainer: null,
-	displaySystem: null,
-	physicsSystem: null,
-	
+	leftScore: 0,
+	rightScore: 0,
+
 	init: function (canvasContainer) {
-		// init vars
-		this.rightScoreX = this.displayWidth - 100;
-		
 		// create entities
-		this.ball = System.createEntity();
-		this.ball.addComponent(new Position(250, 250));
-		this.ball.addComponent(new Dimensions(8, 8));
-		this.ball.addComponent(new Velocity(5, 0));
-		this.ball.addComponent(new Collidable());
-		this.ball.addComponent(new Rectangle());
-		this.ball.addComponent(new Color());
+		var ball = System.createEntity()
+			.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2))
+			.addComponent(new Rectangle(8, 8))
+			.addComponent(new Velocity(5, 0))
+			.addComponent(new Collidable())
+			.addComponent(new Ball())
+			.addComponent(new Color());
 		
-		this.p1Score = System.createEntity();
-		this.p1Score.addComponent(new Position(this.leftScoreX, this.leftScoreY));
-		this.p1Score.addComponent(new Text());
+		var ball2 = System.createEntity()
+			.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 + 10))
+			.addComponent(new Rectangle(8, 8))
+			.addComponent(new Velocity(-5, 0))
+			.addComponent(new Collidable())
+			.addComponent(new Ball())
+			.addComponent(new Color("red"));
 		
-		this.p2Score = System.createEntity();
-		this.p2Score.addComponent(new Position(this.rightScoreX, this.rightScoreY));
-		this.p2Score.addComponent(new Text());
+		var ball3 = System.createEntity()
+			.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 - 10))
+			.addComponent(new Rectangle(8, 8))
+			.addComponent(new Velocity(5, 0))
+			.addComponent(new Collidable())
+			.addComponent(new Ball())
+			.addComponent(new Color("green"));
 		
-		this.p1Paddle = System.createEntity();
-		this.p1Paddle.addComponent(new Position(50, this.leftPlayerPaddleY));
-		this.p1Paddle.addComponent(new Dimensions(8, 50));
-		this.p1Paddle.addComponent(new Collidable());
-		this.p1Paddle.addComponent(new Rectangle());
-		this.p1Paddle.addComponent(new Color());
+		var leftPlayerScore = new Score();
+		var p1Score = System.createEntity()
+			.addComponent(new Position(this.leftScoreX, this.leftScoreY))
+			.addComponent(new Color("cyan"))
+			.addComponent(new Text(this.leftScore))
+			.addComponent(leftPlayerScore);
 		
-		this.p2Paddle = System.createEntity();
-		this.p2Paddle.addComponent(new Position(450, this.rightPlayerPaddleY));
-		this.p2Paddle.addComponent(new Dimensions(8, 50));
-		this.p2Paddle.addComponent(new Collidable());
-		this.p2Paddle.addComponent(new Rectangle());
-		this.p2Paddle.addComponent(new Color());
+		var rightPlayerScore = new Score();
+		var p2Score = System.createEntity()
+			.addComponent(new Position(this.displayWidth - 100, this.rightScoreY))
+			.addComponent(new Color("yellow"))
+			.addComponent(new Text())
+			.addComponent(rightPlayerScore);
+		
+		var p1Paddle = System.createEntity()
+			.addComponent(new Position(50, this.displayHeight / 2 + 75))
+			.addComponent(new Rectangle(8, 50))
+			.addComponent(new Collidable())
+			.addComponent(new Color("cyan"));
+		
+		var p2Paddle = System.createEntity()
+			.addComponent(new Position(this.displayWidth - 50, this.displayHeight / 2 - 125))
+			.addComponent(new Rectangle(8, 50))
+			.addComponent(new Collidable())
+			.addComponent(new Color("yellow"));
+		
+		var p1Goal = System.createEntity()
+			.addComponent(new Position(this.displayWidth + 1, 0))
+			.addComponent(new Rectangle(1, this.displayHeight))
+			.addComponent(new Color("cyan"))
+			.addComponent(new GoalZone())
+			.addComponent(leftPlayerScore);
+		
+		var p2Goal = System.createEntity()
+			.addComponent(new Position(-2, 0))
+			.addComponent(new Rectangle(1, this.displayHeight))
+			.addComponent(new Color("yellow"))
+			.addComponent(new GoalZone())
+			.addComponent(rightPlayerScore);
+		
+		var topWall = System.createEntity()
+			.addComponent(new Position(0, -1))
+			.addComponent(new Rectangle(this.displayWidth, 1))
+			.addComponent(new Collidable());
+		
+		var bottomWall = System.createEntity()
+			.addComponent(new Position(0, this.displayHeight))
+			.addComponent(new Rectangle(this.displayWidth, 1))
+			.addComponent(new Collidable());
 		
 		this.canvasContainer = canvasContainer;
-		this.displaySystem = new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
-		this.physicsSystem = new PhysicsSystem(this.physicsUpdateInterval);
+		new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
+		new PhysicsSystem(this.physicsUpdateInterval);
+		new GoalSystem(this.physicsUpdateInterval);
 	},
 	
 	start: function () {
@@ -67,3 +102,13 @@ var GameEngine = Class.extend({
 		System.stopSystems();
 	}
 });
+
+var GameHelper = {
+	overlap : function (newX, newY, Rectangle, secondEntity) {
+		return !(
+			(newY + Rectangle.height <= secondEntity.components.Position.y) ||
+			(newY >= secondEntity.components.Position.y + secondEntity.components.Rectangle.height) ||
+			(newX >= secondEntity.components.Position.x + secondEntity.components.Rectangle.width) ||
+			(newX + Rectangle.width <= secondEntity.components.Position.x));
+	}
+};
