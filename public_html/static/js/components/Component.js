@@ -67,3 +67,15 @@ var Rectangle = Component.extend({
 var Text = Component.extend({
 	name: 'Text'
 });
+
+var KeyControlledPaddle = Component.extend({
+    name: 'KeyControlledPaddle',
+    maxY: 0,
+    minY: 0,
+    increment: 0,
+    init: function (minY, maxY, increment) {
+        this.maxY = maxY;
+        this.minY = minY;
+        this.increment = increment;
+    }
+});

@@ -4,6 +4,8 @@ var GameEngine = Class.extend({
 	displayHeight: 300,
 	physicsUpdateInterval : 20,
 	displayUpdateInterval: 40,
+	paddleUpdateInterval: 10,
+    paddleMotionIncrement: 3,
 	leftScoreX : 100, 
 	leftScoreY : 20,
 	rightScoreX : 0, 
@@ -57,12 +59,14 @@ var GameEngine = Class.extend({
 			.addComponent(new Rectangle(8, 50))
 			.addComponent(new Collidable())
 			.addComponent(new Color("cyan"));
+		    //.addComponent(new AIControlledPaddle(8, this.displayHeight - 8, this.paddleMotionIncrement));
 		
 		var p2Paddle = System.createEntity()
 			.addComponent(new Position(this.displayWidth - 50, this.displayHeight / 2 - 125))
 			.addComponent(new Rectangle(8, 50))
 			.addComponent(new Collidable())
-			.addComponent(new Color("yellow"));
+			.addComponent(new Color("yellow"))
+            .addComponent(new KeyControlledPaddle(8, this.displayHeight - 8, this.paddleMotionIncrement));
 		
 		var p1Goal = System.createEntity()
 			.addComponent(new Position(this.displayWidth + 1, 0))
@@ -92,6 +96,8 @@ var GameEngine = Class.extend({
 		new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
 		new PhysicsSystem(this.physicsUpdateInterval);
 		new GoalSystem(this.physicsUpdateInterval);
+		new KeyboardPaddleSystem(this.paddleUpdateInterval);
+		//new AIPaddleSystem(this.paddleUpdateInterval);
 	},
 	
 	start: function () {
