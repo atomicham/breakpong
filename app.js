@@ -3,6 +3,17 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var chat = require('./modules/chat.js')(http);
+var azure = require('azure-storage');
+
+// use seperate table for development
+// create the user table
+var tableSvc = azure.createTableService();
+tableSvc.createTableIfNotExists('users', function (error, result, response) {
+	if (!error) {
+
+	}
+});
+
 // server configuration
 var port = process.env.port || 1337;
 
