@@ -93,7 +93,7 @@ var GameEngine = Class.extend({
 			.addComponent(new Collidable());
 
 		var net = System.createEntity()
-			.addComponent(new DashedLine((this.displayWidth / 2) - (this.wallThickness / 2), this.displayHeight - this.wallThickness, "white", this.wallThickness, [10]))
+			.addComponent(new DashedLine((this.displayWidth / 2) - (this.wallThickness / 2), this.displayHeight - this.wallThickness, this.wallThickness, [10]))
             .addComponent(new Position((this.displayWidth / 2) - (this.wallThickness / 2), this.wallThickness))
 		    .addComponent(new Color("white"));
 

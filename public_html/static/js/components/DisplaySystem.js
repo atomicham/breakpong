@@ -65,7 +65,7 @@ var DisplaySystem = System.extend({
 	    }
 	    else if (!!components.DashedLine) {
 	        var dL = components.DashedLine;
-	        this.canvas.drawLine(position.x, position.y, dL.endX, dL.endY, color.color, dL.lineWidth, dL.dashArray);
+	        this.canvas.drawLine(position.x, position.y, dL.endX, dL.endY, color, dL.lineWidth, dL.dashArray);
 	    }
 	    else if (!!entity.components.Text) {
 			var text = '';
