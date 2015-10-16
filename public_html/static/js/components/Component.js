@@ -28,7 +28,11 @@ var Velocity = Component.extend({
 });
 
 var Collidable = Component.extend({
-	name: 'Collidable'
+    name: 'Collidable',
+    passThruVelocity : null,
+    init: function (passThruVelocity) {
+        this.passThruVelocity = passThruVelocity;
+    }
 });
 
 var Ball = Component.extend({

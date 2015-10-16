@@ -40,7 +40,7 @@ var GameEngine = Class.extend({
 		
 		var leftPlayerScore = new Score();
 		var p1Score = System.createEntity()
-			.addComponent(new Position(this.displayWidth / 2 - 50 - 40, this.scoreY))
+			.addComponent(new Position(this.displayWidth / 2 - 100, this.scoreY))
 			.addComponent(new Color("cyan"))
 			.addComponent(new Text(this.leftScore))
 			.addComponent(leftPlayerScore);
@@ -55,14 +55,14 @@ var GameEngine = Class.extend({
 		var p1Paddle = System.createEntity()
 			.addComponent(new Position(50, this.displayHeight / 2 + 75))
 			.addComponent(new Rectangle(8, 50))
-			.addComponent(new Collidable())
+			.addComponent(new Collidable({ x: 1, y: 0 }))
 			.addComponent(new Color("cyan"));
 		    //.addComponent(new AIControlledPaddle(8, this.displayHeight - 8, this.paddleMotionIncrement));
 		
 		var p2Paddle = System.createEntity()
 			.addComponent(new Position(this.displayWidth - 50, this.displayHeight / 2 - 125))
 			.addComponent(new Rectangle(8, 50))
-			.addComponent(new Collidable())
+			.addComponent(new Collidable({ x: -1, y: 0 }))
 			.addComponent(new Color("yellow"))
             .addComponent(new KeyControlledPaddle(this.wallThickness, this.displayHeight - this.wallThickness, this.paddleMotionIncrement));
 		
@@ -121,5 +121,20 @@ var GameHelper = {
 			(newY >= secondEntity.components.Position.y + secondEntity.components.Rectangle.height) ||
 			(newX >= secondEntity.components.Position.x + secondEntity.components.Rectangle.width) ||
 			(newX + Rectangle.width <= secondEntity.components.Position.x));
+	},
+
+    // allows collidables to be permeable from one direction, but not others.
+	passthru : function (itemThatPasses, itemThatIsPassed)
+	{
+	    comparisonCollidable = itemThatIsPassed.components.Collidable;
+	    if (comparisonCollidable.passThruVelocity && comparisonCollidable.passThruVelocity.x)
+	    {
+	        if ((itemThatPasses.components.Velocity.x > 0 && comparisonCollidable.passThruVelocity.x > 0) ||
+                (itemThatPasses.components.Velocity.x < 0 && comparisonCollidable.passThruVelocity.x < 0))
+	        {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 };
