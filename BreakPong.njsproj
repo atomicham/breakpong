@@ -39,7 +39,7 @@
     <Compile Include="modules\chat.js" />
     <Content Include="public_html\static\js\game.js" />
     <Content Include=".travis.yml" />
-    <Content Include="public_html\static\js\chat.js" />
+    <Content Include="public_html\static\app\partials\chat.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.js" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.min.js" />
     <Content Include="public_html\static\vendor\angular-route\index.js" />
@@ -48,7 +48,7 @@
     <Content Include="public_html\static\app\views\game.html" />
     <Content Include="public_html\static\app\views\lobby.html" />
     <Content Include="public_html\static\css\main.css" />
-    <Content Include="public_html\static\js\main.js" />
+    <Content Include="public_html\static\app\main.js" />
     <Content Include="public_html\static\vendor\angular-route\.bower.json" />
     <Content Include="public_html\static\vendor\angular-route\angular-route.min.js.map" />
     <Content Include="public_html\static\vendor\angular-route\bower.json" />
