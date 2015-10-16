@@ -26,11 +26,13 @@ var PhysicsSystem = System.extend({
 		if (!!entity.components.Collidable) {
 			// check if the newX,newY collides with any of the above
 			
-			for (var id in this.collidableEntities) {
-				if (entity != this.collidableEntities[id] && GameHelper.overlap(newX, newY, entity.components.Rectangle, this.collidableEntities[id])) {
-					entity.components.Velocity.x *= -1;
-					entity.components.Velocity.y *= -1;
-					collided = true;
+		    for (var id in this.collidableEntities) {
+		        if (entity != this.collidableEntities[id] &&
+                    !GameHelper.passthru(entity, this.collidableEntities[id]) &&
+                    GameHelper.overlap(newX, newY, entity.components.Rectangle, this.collidableEntities[id])) {
+			            entity.components.Velocity.x *= -1;
+			            entity.components.Velocity.y *= -1;
+			            collided = true;
 				}
 			}
 			
