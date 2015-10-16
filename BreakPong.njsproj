@@ -8,8 +8,7 @@
     <NodejsPort>1337</NodejsPort>
     <DebuggerPort>5858</DebuggerPort>
     <LaunchUrl>http://localhost:1337</LaunchUrl>
-    <Environment>
-    </Environment>
+    <Environment>local_dev=true</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -37,6 +36,8 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="modules\chat.js" />
+    <Compile Include="modules\pong-storage.js" />
+    <Content Include="public_html\login.html" />
     <Content Include="public_html\static\js\game.js" />
     <Content Include=".travis.yml" />
     <Content Include="public_html\static\app\partials\chat.js" />
