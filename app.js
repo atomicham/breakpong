@@ -31,10 +31,17 @@ passport.deserializeUser(function (obj, done) {
 	done(null, obj);
 });
 
+var callbackHost;
+if (process.env.local_dev) {
+	callbackHost = "http://" + host + ":" + port;
+} else {
+	callbackHost = "http://" + host;
+}
+
 passport.use(new GoogleStrategy({
 	clientID: process.env.GOOGLE_CLIENT_ID,
 	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-	callbackURL: "http://" + host + ":" + port + "/auth/google/callback"
+	callbackURL: callbackHost + "/auth/google/callback"
 },
   function (accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {
