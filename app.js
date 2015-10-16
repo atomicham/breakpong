@@ -3,22 +3,26 @@ var express = require('express'),
 	app = express(),
 	http = require('http').Server(app),
 	cookieParser = require('cookie-parser'),
+//	bodyParser = require('body-parser'),
 	session = require('express-session'),
 	passport = require('passport'),
 	ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn,
 	chat = require('./modules/chat.js')(http),
-	pongStorage = require('./modules/pong-storage.js')
-GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	pongStorage = require('./modules/pong-storage.js'),
+	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 
 // configuration.
 var port = process.env.port || 1337;
 var host = process.env.hostaddr || '127.0.0.1';
+var sessionSecret = process.env.SESSION_SECRET || 'keyboard cat';
 
 // setup express.
 app.use('/static', express.static('public_html/static'));
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat' }));
+//app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
+app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -45,10 +49,11 @@ passport.use(new GoogleStrategy({
 },
   function (accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {
-		return done(null, profile);
+		return pongStorage.User.findOrCreate({ googleId: profile.id }, function (err, user) {
+			return done(err, user);
+		});
 	});
-}
-));
+}));
 
 // passport auth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
@@ -73,6 +78,9 @@ app.get('/logout', function (req, res) {
 	req.logout();
 	res.redirect('/');
 });
+
+// initialize storage
+pongStorage.initialize();
 
 // start server.
 http.listen(port, function () {
