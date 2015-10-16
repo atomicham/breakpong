@@ -64,6 +64,24 @@ var Rectangle = Component.extend({
 	}
 });
 
+var DashedLine = Class.extend({
+    name: 'DashedLine',
+    endX:0,
+    endY:0, 
+    color:'white', 
+    lineWidth: 0,
+    dashArray: [],
+
+    init: function (endX, endY, color, lineWidth, dashArray) {
+        this.endX = endX;
+        this.endY = endY;
+        this.color = color;
+        this.lineWidth = lineWidth;
+        this.dashArray = dashArray;
+    }
+});
+
+
 var Text = Component.extend({
 	name: 'Text'
 });

@@ -4,9 +4,12 @@ var TwoDCanvas = Class.extend({
 	context: null,
 	canvasWidth : null, 
 	canvasHeight : null, 
-	xCorrection: 0.5,
-	yCorrection: 0.5,
-	pixelWidth: 0.5,
+	//xCorrection: 0.5,
+	//yCorrection: 0.5,
+	//pixelWidth: 0.5,
+	xCorrection: 0,
+	yCorrection: 0,
+	pixelWidth: 1,
 	finishedDrawing : function () { },
 	
 	init : function (canvasContainer, canvasWidth, canvasHeight, finishedDrawing) {
@@ -36,20 +39,6 @@ var TwoDCanvas = Class.extend({
 		this.context.fillStyle = color;
 		this.context.fillText(text, x, y);
 	},
-	
-	//    drawLine: function (x, y, x2, y2, color) {
-	//    	var context = this.context;
-	//        if (!color) {
-	//            color = "#666666";
-	//        }
-	//        context.strokeStyle = color;
-	//        context.lineWidth = 1;
-	//        context.beginPath();
-	//        context.moveTo(x + this.xCorrection, y + this.yCorrection);
-	//        context.lineTo(x2 + this.xCorrection, y2 + this.yCorrection);
-	//        context.closePath();
-	//        this.context.stroke();
-	//    },
 	
 	drawImage : function (url, x, y) {
 		var self = this;
@@ -91,6 +80,28 @@ var TwoDCanvas = Class.extend({
 		}
 	},
 	
+	drawLine : function(startX,startY,endX,endY, color, width, dashArray)
+	{
+	    var context = this.context;
+
+	    if (color){
+	        context.strokeStyle = color;
+	    }
+
+	    if (width) {
+	        context.lineWidth = width;
+	    }
+
+	    if (dashArray) {
+	        context.setLineDash(dashArray);
+	    }
+
+	    context.beginPath();
+	    context.moveTo(startX, startY);
+	    context.lineTo(endX, endY);
+	    context.stroke();
+	},
+
 	drawPolygon : function (polygon) {
 		var context = this.context;
 		
