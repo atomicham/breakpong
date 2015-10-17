@@ -32,7 +32,10 @@ var PhysicsSystem = System.extend({
 					!GameHelper.passthru(entity, this.collidableEntities[id]) &&
 					GameHelper.overlap(newX, newY, entity.components.Rectangle, this.collidableEntities[id]))
 				{
-					GameHelper.bounce(entity, this.collidableEntities[id]);
+					if (!!entity.components.Ball)
+					{
+						GameHelper.bounce(newX, newY, entity, this.collidableEntities[id]);
+					}
 					collided = true;
 				}
 			}

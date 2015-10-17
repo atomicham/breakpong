@@ -150,14 +150,21 @@ var GameHelper = {
 		var ballVelocity = ballEntity.components.Velocity;
 		var ballRectangle = ballEntity.components.Rectangle;
 
+		// starting position
 		ballPosition.x = rectanglePosition.x + (ballRectangle.width * xStartDirection);
 		ballPosition.y = this.randFromRange(rectanglePosition.y, rectanglePosition.y + rectangle.height + (ballRectangle.height * xStartDirection));
+
+		// starting velocity 
 		// x determined randomly
-		ballVelocity.x = this.randFromRange(2, desiredSpeed);
-		// determine y velocity for desired speed
+		// make sure that x velocity accounts for at least 60% (serves have more forward motion than vertical motion)
+		ballVelocity.x = this.randFromRange(desiredSpeed - (desiredSpeed * 0.4), desiredSpeed);
+
+		// y velocity calculated to ensure desired speed is maintained.
 		var speedSquared = Math.pow(desiredSpeed, 2);
 		var xSquared = Math.pow(ballVelocity.x, 2);
 		ballVelocity.y = Math.sqrt(speedSquared - xSquared);
+
+		// apply direction
 		ballVelocity.x *= xStartDirection;
 	},
 
@@ -166,38 +173,110 @@ var GameHelper = {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 
-	bounce : function(bouncingEntity, surface)
+	bounce : function(newX, newY, bouncingEntity, surface)
 	{
-		var velocity = bouncingEntity.components.Velocity;
-		var rectangle = surface.components.Rectangle;
+		var ballVelocity = bouncingEntity.components.Velocity;
+		var ballPosition = bouncingEntity.components.Position;
+		var ballRectangle = bouncingEntity.components.Rectangle;
+		var surfacePosition = surface.components.Position;
+		var surfaceRectangle = surface.components.Rectangle;
 
-		// angle of incidence should equal angle of reflection
-		// if it hits the left or right wall, change the x sign
-		// if it hits the top or bottom wall, change the y sign
+		// determine Overlapping Side, so we know which way to bounce. 
+
+		var hitVerticalSurface = false;
+		var hitHorizontalSurface = false;
+
+		//               ^
+		//               |
+		//             +---+
+		//          +--| A |---+ 
+		//          |  +---+   |
+		//      +----+       +----+ 
+		//  <-- |  C |       | D  |  -->
+		//      +----+       +----+
+		//          |          |
+		//          |  +---+  +---+
+		//          +--| B |--| E | -?>
+		//             +---+  +---+ 
+		//               |      ?    
+		//               V      V
+
+		// TOP
+		if (this.pointContainedWithinRectangle(newX, newY + ballRectangle.height, surfaceRectangle, surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitHorizontalSurface = true;
+		}
+		// BOTTOM
+		else if(this.pointContainedWithinRectangle(newX,newY,surfaceRectangle,surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY, surfaceRectangle, surfacePosition))
+		{
+			hitHorizontalSurface = true;
+		}
+		// LEFT
+		else if(this.pointContainedWithinRectangle(newX,newY,surfaceRectangle,surfacePosition) &&
+			this.pointContainedWithinRectangle(newX, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitVerticalSurface = true;
+		}
+		// RIGHT
+		else if (this.pointContainedWithinRectangle(newX + ballRectangle.width, newY, surfaceRectangle, surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitVerticalSurface = true;
+		}
+		// when a single point intersects, we're moving diagonally, so it's a tie,
+		// choose randomly
+		else
+		{
+			if (this.randFromRange(1, 100) > 50)
+			{
+				hitVerticalSurface = true;
+			}
+			else
+			{
+				hitHorizontalSurface = true;
+			}
+		}
+
+		// if you hit vertical surface, change the x sign
+		// if you hit horizontal surface, change the y sign
 		//
-		//          -,+    +,+
+		//        -,+   0,+   +,+
 		//      0-----------------N
-		//      |                 |
+		//      |       0,-       |
 		//  +,- |    -,-   +,-    | -,- 
 		//      |       \ /       |
-		//      |        +        |
+		//  +,0 | -,0    +    +,0 | -,0
 		//      |       / \       |
 		//  +,+ |    -,+   +,+    | +,-
-		//      |                 |
+		//      |       0,+       |
 		//      N-----------------N
-		//           -,-   +,- 
-		//
+		//        -,-   0,-   +,-
 
-		var vertical = rectangle.width < rectangle.height;
-		var horizontal = rectangle.width > rectangle.height;
-
-		if (vertical)
+		if (hitVerticalSurface)
 		{
-			velocity.x *= -1;
+			ballVelocity.x *= -1;
 		}
-		if (horizontal)
+		if (hitHorizontalSurface)
 		{
-			velocity.y *= -1;
+			ballVelocity.y *= -1;
+		}
+	},
+
+	pointContainedWithinRectangle : function(x,y, rectangle, rectanglePosition)
+	{
+		if(x >= rectanglePosition.x && 
+		   x <= rectanglePosition.x + rectangle.width &&
+		   y >= rectanglePosition.y &&
+		   y <= rectanglePosition.y + rectangle.height)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
+
 };
