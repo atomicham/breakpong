@@ -67,11 +67,11 @@ app.get('/auth/google/callback',
 
 // define routes.
 app.get('/', ensureLoggedIn('/login'), function (req, res) {
-	res.sendFile(__dirname + '/public_html/main.html');
+	res.sendFile(__dirname + '/templates/main.html');
 });
 
 app.get('/login', function (req, res) {
-	res.sendFile(__dirname + '/public_html/login.html');
+	res.sendFile(__dirname + '/templates/login.html');
 });
 
 app.get('/logout', function (req, res) {
