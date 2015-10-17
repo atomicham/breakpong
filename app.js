@@ -18,7 +18,7 @@ var host = process.env.hostaddr || '127.0.0.1';
 var sessionSecret = process.env.SESSION_SECRET || 'keyboard cat';
 
 // setup express.
-app.use('/static', express.static('public_html/static'));
+app.use('/static', express.static('static'));
 app.use(cookieParser());
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(bodyParser.json());
