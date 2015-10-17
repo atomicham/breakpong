@@ -72,11 +72,11 @@ app.get('/auth/google/callback',
 
 // define routes.
 app.get('/', ensureLoggedIn('/login'), function (req, res) {
-	res.render('main');
+	res.render('main', { title: 'BreakPong', user: req.session.passport.user.name });
 });
 
 app.get('/login', function (req, res) {
-	res.render('login');
+	res.render('login', { title: 'BreakPong Login' });
 });
 
 app.get('/logout', function (req, res) {

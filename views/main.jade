@@ -5,7 +5,7 @@ block headerScripts
   script(type="text/javascript" src="static/vendor/angular-route/angular-route.js")
 
 block content
-  div.viewArea(ng-app="pongBreakApp" ng-controller="masterController")
+  div.viewArea(ng-app="pongBreakApp" ng-controller="masterController" ng-init="user = '#{user}'")
     ul.menu
       li
         a(href="#/lobby") Lobby
