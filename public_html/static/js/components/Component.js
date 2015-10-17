@@ -28,15 +28,19 @@ var Velocity = Component.extend({
 });
 
 var Collidable = Component.extend({
-    name: 'Collidable',
-    passThruVelocity : null,
-    init: function (passThruVelocity) {
-        this.passThruVelocity = passThruVelocity;
-    }
+	name: 'Collidable',
+	passThruVelocity : null,
+	init: function (passThruVelocity) {
+		this.passThruVelocity = passThruVelocity;
+	}
 });
 
 var Ball = Component.extend({
 	name: 'Ball'
+});
+
+var Paddle = Component.extend({
+	name: 'Paddle'
 });
 
 var GoalZone = Component.extend({
@@ -69,18 +73,18 @@ var Rectangle = Component.extend({
 });
 
 var DashedLine = Class.extend({
-    name: 'DashedLine',
-    endX:0,
-    endY:0,
-    lineWidth: 0,
-    dashArray: [],
+	name: 'DashedLine',
+	endX:0,
+	endY:0,
+	lineWidth: 0,
+	dashArray: [],
 
-    init: function (endX, endY, lineWidth, dashArray) {
-        this.endX = endX;
-        this.endY = endY;
-        this.lineWidth = lineWidth;
-        this.dashArray = dashArray;
-    }
+	init: function (endX, endY, lineWidth, dashArray) {
+		this.endX = endX;
+		this.endY = endY;
+		this.lineWidth = lineWidth;
+		this.dashArray = dashArray;
+	}
 });
 
 
@@ -89,13 +93,18 @@ var Text = Component.extend({
 });
 
 var KeyControlledPaddle = Component.extend({
-    name: 'KeyControlledPaddle',
-    maxY: 0,
-    minY: 0,
-    increment: 0,
-    init: function (minY, maxY, increment) {
-        this.maxY = maxY;
-        this.minY = minY;
-        this.increment = increment;
-    }
+	name: 'KeyControlledPaddle',
+	maxY: 0,
+	minY: 0,
+	increment: 0,
+    upKey:0,
+    downKey:0,
+	init: function (minY, maxY, increment, upKey, downKey) {
+		this.maxY = maxY;
+		this.minY = minY;
+		this.increment = increment;
+		this.upKey = upKey;
+		this.downKey = downKey;
+	}
 });
+
