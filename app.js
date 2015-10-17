@@ -1,5 +1,6 @@
 ﻿// modules.
 var express = require('express'),
+	jade = require('jade'),
 	app = express(),
 	http = require('http').Server(app),
 	cookieParser = require('cookie-parser'),
@@ -18,6 +19,9 @@ var host = process.env.hostaddr || '127.0.0.1';
 var sessionSecret = process.env.SESSION_SECRET || 'keyboard cat';
 
 // setup express.
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
 app.use('/static', express.static('static'));
 app.use(cookieParser());
 //app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +29,7 @@ app.use(cookieParser());
 app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // passport setup.
 passport.serializeUser(function (user, done) {
