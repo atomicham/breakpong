@@ -41,7 +41,7 @@ passport.deserializeUser(function (obj, done) {
 });
 
 var callbackHost;
-if (process.env.local_dev) {
+if ('development' == app.get('env')) {
 	callbackHost = "http://" + host + ":" + port;
 } else {
 	callbackHost = "http://" + host;
@@ -72,11 +72,11 @@ app.get('/auth/google/callback',
 
 // define routes.
 app.get('/', ensureLoggedIn('/login'), function (req, res) {
-	res.sendFile(__dirname + '/templates/main.html');
+	res.render('main');
 });
 
 app.get('/login', function (req, res) {
-	res.sendFile(__dirname + '/templates/login.html');
+	res.render('login');
 });
 
 app.get('/logout', function (req, res) {

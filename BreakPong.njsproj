@@ -78,7 +78,9 @@
     <Content Include="static\vendor\angular\bower.json" />
     <Content Include="static\vendor\angular\package.json" />
     <Content Include="static\vendor\angular\README.md" />
-    <Content Include="views\login.html" />
+    <Content Include="views\header.jade" />
+    <Content Include="views\master.jade" />
+    <Content Include="views\login.jade" />
     <Content Include="views\main.jade" />
   </ItemGroup>
   <ItemGroup>
