@@ -79,6 +79,7 @@
     <Content Include="static\vendor\angular\package.json" />
     <Content Include="static\vendor\angular\README.md" />
     <Content Include="views\header.jade" />
+    <Content Include="views\setup.jade" />
     <Content Include="views\master.jade" />
     <Content Include="views\login.jade" />
     <Content Include="views\main.jade" />
