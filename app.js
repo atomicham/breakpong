@@ -10,7 +10,7 @@ var express = require('express'),
 	chat = require('./modules/chat.js')(http),
 	pongStorage = require('./modules/pong-storage.js'),
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+//TODO add handlebars template engine to pass session data to client.
 
 // configuration.
 var port = process.env.port || 1337;
