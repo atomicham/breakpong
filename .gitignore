@@ -212,4 +212,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
-public_html/static/vendor/
+static/vendor/
