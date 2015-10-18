@@ -11,7 +11,8 @@ var express = require('express'),
 	ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn,
 	chat = require('./modules/chat.js')(http),
 	pongStorage = require('./modules/pong-storage.js'),
-	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+	GitHubStrategy = require('passport-github').Strategy;
 //TODO add handlebars template engine to pass session data to client.
 
 // configuration.
@@ -47,6 +48,8 @@ if ('development' == app.get('env')) {
 	callbackHost = "http://" + host;
 }
 
+// passport auth strategies and routes
+// google
 passport.use(new GoogleStrategy({
 	clientID: process.env.GOOGLE_CLIENT_ID,
 	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -60,7 +63,6 @@ passport.use(new GoogleStrategy({
 	});
 }));
 
-// passport auth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
 app.get('/auth/google/callback', 
@@ -69,6 +71,31 @@ app.get('/auth/google/callback',
 	// Successful authentication, redirect home.
 	res.redirect('/');
 });
+
+//github
+passport.use(new GitHubStrategy({
+	clientID: process.env.GITHUB_CLIENT_ID,
+	clientSecret: process.env.GITHUB_CLIENT_SECRET,
+	callbackURL: callbackHost + "/auth/github/callback"
+},
+  function (accessToken, refreshToken, profile, done) {
+	process.nextTick(function () {
+		return pongStorage.User.findOrCreate({ githubId: profile.id }, function (err, user) {
+			return done(err, user);
+		});
+	});
+}));
+
+app.get('/auth/github', passport.authenticate('github'));
+
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function (req, res) {
+	// Successful authentication, redirect home.
+	res.redirect('/');
+});
+
+
 
 // app middlewares.
 var checkIfRenameNeeded = function $checkIfRenameNeeded(req, res, next) {
@@ -79,7 +106,7 @@ var checkIfRenameNeeded = function $checkIfRenameNeeded(req, res, next) {
 };
 
 var checkIfAccountSetup = function $checkIfAccountSetup(req, res, next) {
-	if (!req.user.flagRename || !req.user.flagSetup) {
+	if (!req.user.flagRename && !req.user.flagSetup) {
 		return res.redirect('/');
 	}
 	next();

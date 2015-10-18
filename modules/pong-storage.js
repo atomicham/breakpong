@@ -144,6 +144,8 @@
 						
 						if (!!profile.googleId) {
 							user.GoogleID = entityGen.String(profile.googleId);
+						} else if (!!profile.githubId) {
+							user.GitHubID = entityGen.String(profile.githubId);
 						}
 						
 						tableSvc.insertEntity(usersTable, user, { echoContent: true }, function (error, result, response) {
