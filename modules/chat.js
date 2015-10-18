@@ -1,5 +1,4 @@
-﻿module.exports = function (http) {
-	var io = require('socket.io')(http);
+﻿module.exports = function (io) {
 
 	var userCount = 0;
 

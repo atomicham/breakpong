@@ -7,12 +7,16 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
+	// passport
 	passport = require('passport'),
 	ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn,
-	chat = require('./modules/chat.js')(http),
-	pongStorage = require('./modules/pong-storage.js'),
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-	GitHubStrategy = require('passport-github').Strategy;
+	GitHubStrategy = require('passport-github').Strategy,
+	// socket io
+	io = require('socket.io')(http),
+	chat = require('./modules/chat.js')(io),
+	// app storage
+	pongStorage = require('./modules/pong-storage.js');
 //TODO add handlebars template engine to pass session data to client.
 
 // configuration.
