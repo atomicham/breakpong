@@ -1,5 +1,5 @@
 ﻿(function () {
-	var socket = io('http://localhost:1337/chat');
+	var socket = io(window.location.origin + '/chat');
 	
 	var text = $("#chatText");
 	var send = $("#chatSend");
