@@ -1,11 +1,12 @@
 ﻿<div ng-controller="chatController">
 	<div class="chatContainer">
-		<ul class="chatBox" id="chatMessages"></ul>
+		<ul class="chatBox" id="chatMessages">
+			<li ng-repeat="msg in chat.messages track by $index">{{msg}}</li>
+
+		</ul>
 		<div class="chatControls">
-			<input id="chatText" type="text" />
-			<input id="chatSend" type="button" value="Send" />
+			<input id="chatText" type="text" ng-model="chat.message" ng-keyup="chat.messageKeyUp($event)" />
+			<input id="chatSend" type="button" value="Send" ng-click="sendMessage()" />
 		</div>
 	</div>
-	<script type="text/javascript" ng-src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript" ng-src="static/app/partials/chat.js"></script>
 </div>

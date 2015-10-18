@@ -3,7 +3,7 @@
 block headerScripts
   script(type="text/javascript" src="static/vendor/angular/angular.js")
   script(type="text/javascript" src="static/vendor/angular-route/angular-route.js")
-
+  script(type="text/javascript" src="/socket.io/socket.io.js")
 block content
   div.viewArea(ng-app="pongBreakApp" ng-controller="masterController" ng-init="$scope.user = '#{user}'")
     ul.menu
