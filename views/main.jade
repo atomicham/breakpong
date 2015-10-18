@@ -4,6 +4,11 @@ block headerScripts
   script(type="text/javascript" src="static/vendor/angular/angular.js")
   script(type="text/javascript" src="static/vendor/angular-route/angular-route.js")
   script(type="text/javascript" src="/socket.io/socket.io.js")
+
+block scripts
+  script(type="text/javascript" src="static/app/chat.js")
+  script(type="text/javascript" src="static/app/main.js")
+
 block content
   div.viewArea(ng-app="pongBreakApp" ng-controller="masterController" ng-init="$scope.user = '#{user}'")
     ul.menu
@@ -15,4 +20,3 @@ block content
         a(href="#/game") Game
     div(ng-view)
     div#chatWindow(ng-include="'static/app/partials/chat.html'")
-    script(type="text/javascript" src="static/app/main.js")
