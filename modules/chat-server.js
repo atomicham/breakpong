@@ -1,9 +1,9 @@
 ﻿module.exports = function (io) {
+	var chat = io.of('/chat');
 
 	var userCount = 0;
-
 	// Setup IO connection listener
-	io.on('connection', function (socket) {
+	chat.on('connection', function (socket) {
 		userCount++;
 
 		console.log('a user connected, active users: ' + userCount);

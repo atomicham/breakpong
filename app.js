@@ -14,7 +14,7 @@ var express = require('express'),
 	GitHubStrategy = require('passport-github').Strategy,
 	// socket io
 	io = require('socket.io')(http),
-	chat = require('./modules/chat.js')(io),
+	chat = require('./modules/chat-server.js'),
 	// app storage
 	pongStorage = require('./modules/pong-storage.js');
 //TODO add handlebars template engine to pass session data to client.
@@ -182,6 +182,9 @@ app.use('/profile', profile);
 
 // initialize storage
 pongStorage.initialize();
+
+// initialize chat server.
+chat(io);
 
 // start server.
 http.listen(port, function () {

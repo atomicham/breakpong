@@ -35,7 +35,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="modules\chat.js" />
+    <Compile Include="modules\chat-server.js" />
+    <Compile Include="modules\game-server.js" />
     <Compile Include="modules\pong-storage.js" />
     <Content Include="static\app\main.js" />
     <Content Include="static\app\partials\chat.js" />
