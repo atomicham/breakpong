@@ -1,0 +1,33 @@
+﻿extends master
+
+block content
+	div.viewArea
+		ul
+			li
+				label(for="accountName") Enter your profile name.
+				input#accountName(type='text')
+			li
+				label(for="emailAddress") Enter your e-mail. (optional)
+				input#emailAddress(type='text')
+			li
+				input#send(type="button" value="Submit")
+	script.
+		$("#send").click(function() {
+			var name = $("#accountName").val();
+			var email = $("#emailAddress").val();
+			if (!!name) {
+				jQuery.ajax({
+					url: '/profile/update',
+					method: 'PUT',
+					data: { name: name, email: email}
+				}).done(function(httpCode, status, response) {
+					if (response.status === 200) {
+						window.location.href = '/';	
+					} else {
+						// response failed ? 
+					}
+				});
+			} else {
+				//alert that name needs to be filled.
+			}
+		});
