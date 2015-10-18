@@ -2,11 +2,12 @@
 var GameEngine = Class.extend({
 	displayWidth: 640,
 	displayHeight: 300,
-	physicsUpdateInterval : 20,
+	physicsUpdateInterval : 10,
 	displayUpdateInterval: 40,
 	paddleUpdateInterval: 10,
 	paddleMotionIncrement: 3,
-    wallThickness : 4,
+	wallThickness: 4,
+	ballSpeed: 3,
 	scoreY : 35,
 	canvasContainer: null,
 	leftScore: 0,
@@ -22,25 +23,25 @@ var GameEngine = Class.extend({
 			.addComponent(new Ball())
 			.addComponent(new Color());
 		
-		var ball2 = System.createEntity()
-			.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 + 10))
-			.addComponent(new Rectangle(8, 8))
-			.addComponent(new Velocity(-5, 0))
-			.addComponent(new Collidable())
-			.addComponent(new Ball())
-			.addComponent(new Color("red"));
+		//var ball2 = System.createEntity()
+		//	.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 + 10))
+		//	.addComponent(new Rectangle(8, 8))
+		//	.addComponent(new Velocity(-5, 0))
+		//	.addComponent(new Collidable())
+		//	.addComponent(new Ball())
+		//	.addComponent(new Color("red"));
 		
-		var ball3 = System.createEntity()
-			.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 - 10))
-			.addComponent(new Rectangle(8, 8))
-			.addComponent(new Velocity(5, 0))
-			.addComponent(new Collidable())
-			.addComponent(new Ball())
-			.addComponent(new Color("green"));
+		//var ball3 = System.createEntity()
+		//	.addComponent(new Position(this.displayWidth / 2, this.displayHeight / 2 - 10))
+		//	.addComponent(new Rectangle(8, 8))
+		//	.addComponent(new Velocity(5, 0))
+		//	.addComponent(new Collidable())
+		//	.addComponent(new Ball())
+		//	.addComponent(new Color("green"));
 		
 		var leftPlayerScore = new Score();
 		var p1Score = System.createEntity()
-			.addComponent(new Position(this.displayWidth / 2 - 50 - 40, this.scoreY))
+			.addComponent(new Position(this.displayWidth / 2 - 100, this.scoreY))
 			.addComponent(new Color("cyan"))
 			.addComponent(new Text(this.leftScore))
 			.addComponent(leftPlayerScore);
@@ -55,16 +56,22 @@ var GameEngine = Class.extend({
 		var p1Paddle = System.createEntity()
 			.addComponent(new Position(50, this.displayHeight / 2 + 75))
 			.addComponent(new Rectangle(8, 50))
-			.addComponent(new Collidable())
-			.addComponent(new Color("cyan"));
-		    //.addComponent(new AIControlledPaddle(8, this.displayHeight - 8, this.paddleMotionIncrement));
+			.addComponent(new Collidable({ x: 1, y: 0 }))
+			.addComponent(new Paddle())
+			.addComponent(new Color("cyan"))
+			.addComponent(new KeyControlledPaddle(this.wallThickness, this.displayHeight - this.wallThickness, this.paddleMotionIncrement, 87, 83));
 		
+		GameHelper.centerPaddle(p1Paddle, this.displayHeight);
+
 		var p2Paddle = System.createEntity()
 			.addComponent(new Position(this.displayWidth - 50, this.displayHeight / 2 - 125))
 			.addComponent(new Rectangle(8, 50))
-			.addComponent(new Collidable())
+			.addComponent(new Collidable({ x: -1, y: 0 }))
+			.addComponent(new Paddle())
 			.addComponent(new Color("yellow"))
-            .addComponent(new KeyControlledPaddle(this.wallThickness, this.displayHeight - this.wallThickness, this.paddleMotionIncrement));
+			.addComponent(new KeyControlledPaddle(this.wallThickness, this.displayHeight - this.wallThickness, this.paddleMotionIncrement,38,40));
+
+		GameHelper.centerPaddle(p2Paddle, this.displayHeight);
 		
 		var p1Goal = System.createEntity()
 			.addComponent(new Position(this.displayWidth - this.wallThickness, this.wallThickness))
@@ -72,7 +79,7 @@ var GameEngine = Class.extend({
 			.addComponent(new Color("cyan"))
 			.addComponent(new GoalZone())
 			.addComponent(leftPlayerScore);
-		
+	
 		var p2Goal = System.createEntity()
 			.addComponent(new Position(0, this.wallThickness))
 			.addComponent(new Rectangle(this.wallThickness, this.displayHeight - this.wallThickness))
@@ -83,7 +90,7 @@ var GameEngine = Class.extend({
 		var topWall = System.createEntity()
 			.addComponent(new Position(0, 0))
 			.addComponent(new Rectangle(this.displayWidth, this.wallThickness))
-            .addComponent(new Color("white"))
+			.addComponent(new Color("white"))
 			.addComponent(new Collidable());
 		
 		var bottomWall = System.createEntity()
@@ -94,8 +101,12 @@ var GameEngine = Class.extend({
 
 		var net = System.createEntity()
 			.addComponent(new DashedLine((this.displayWidth / 2) - (this.wallThickness / 2), this.displayHeight - this.wallThickness, this.wallThickness, [10]))
-            .addComponent(new Position((this.displayWidth / 2) - (this.wallThickness / 2), this.wallThickness))
-		    .addComponent(new Color("white"));
+			.addComponent(new Position((this.displayWidth / 2) - (this.wallThickness / 2), this.wallThickness))
+			.addComponent(new Color("white"));
+
+		GameHelper.serve(ball, p2Goal, this.ballSpeed, 1);
+		//GameHelper.serve(ball2, p1Goal, 5, -1);
+		//GameHelper.serve(ball3, p2Goal, 5, 1);
 
 		this.canvasContainer = canvasContainer;
 		new DisplaySystem(this.displayUpdateInterval, this.canvasContainer, this.displayWidth, this.displayHeight);
@@ -121,5 +132,194 @@ var GameHelper = {
 			(newY >= secondEntity.components.Position.y + secondEntity.components.Rectangle.height) ||
 			(newX >= secondEntity.components.Position.x + secondEntity.components.Rectangle.width) ||
 			(newX + Rectangle.width <= secondEntity.components.Position.x));
+	},
+
+	// allows collidables to be permeable from one direction, but not others.
+	passthru : function (itemThatPasses, itemThatIsPassed)
+	{
+		comparisonCollidable = itemThatIsPassed.components.Collidable;
+		if (comparisonCollidable.passThruVelocity && comparisonCollidable.passThruVelocity.x)
+		{
+			if ((itemThatPasses.components.Velocity.x > 0 && comparisonCollidable.passThruVelocity.x > 0) ||
+				(itemThatPasses.components.Velocity.x < 0 && comparisonCollidable.passThruVelocity.x < 0))
+			{
+				return true;
+			}
+		}
+		return false;
+	},
+
+	serve : function(ballEntity, rectangleEntity, desiredSpeed, xStartDirection)
+	{
+		var rectangle = rectangleEntity.components.Rectangle;
+		var rectanglePosition = rectangleEntity.components.Position;
+		var ballPosition = ballEntity.components.Position;
+		var ballVelocity = ballEntity.components.Velocity;
+		var ballRectangle = ballEntity.components.Rectangle;
+		var protectiveSetback = 50; // prevent appearing inside wall
+
+		// starting position
+		ballPosition.x = rectanglePosition.x + (ballRectangle.width * xStartDirection);
+		ballPosition.y = this.randFromRange(rectanglePosition.y + protectiveSetback, rectanglePosition.y + rectangle.height + (ballRectangle.height * xStartDirection) - protectiveSetback);
+
+		// starting velocity 
+		// x determined randomly
+		// make sure that x velocity accounts for at least 60% (serves have more forward motion than vertical motion)
+		ballVelocity.x = this.randFromRange(desiredSpeed - (desiredSpeed * 0.4), desiredSpeed);
+
+		// y velocity calculated to ensure desired speed is maintained.
+		var speedSquared = Math.pow(desiredSpeed, 2);
+		var xSquared = Math.pow(ballVelocity.x, 2);
+		ballVelocity.y = Math.sqrt(speedSquared - xSquared);
+
+		// apply direction
+		ballVelocity.x *= xStartDirection;
+	},
+
+	randFromRange : function (min, max)
+	{
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+
+	bounce : function(newX, newY, bouncingEntity, surface)
+	{
+		var ballVelocity = bouncingEntity.components.Velocity;
+		var ballPosition = bouncingEntity.components.Position;
+		var ballRectangle = bouncingEntity.components.Rectangle;
+		var surfacePosition = surface.components.Position;
+		var surfaceRectangle = surface.components.Rectangle;
+
+		// determine Overlapping Side, so we know which way to bounce. 
+
+		var hitVerticalSurface = false;
+		var hitHorizontalSurface = false;
+
+		//               ^
+		//               |
+		//             +---+
+		//          +--| A |---+ 
+		//          |  +---+   |
+		//      +----+       +----+ 
+		//  <-- |  C |       | D  |  -->
+		//      +----+       +----+
+		//          |          |
+		//          |  +---+  +---+
+		//          +--| B |--| E | -?>
+		//             +---+  +---+ 
+		//               |      ?    
+		//               V      V
+
+		// TOP
+		if (this.pointContainedWithinRectangle(newX, newY + ballRectangle.height, surfaceRectangle, surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitHorizontalSurface = true;
+		}
+		// BOTTOM
+		else if(this.pointContainedWithinRectangle(newX,newY,surfaceRectangle,surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY, surfaceRectangle, surfacePosition))
+		{
+			hitHorizontalSurface = true;
+		}
+		// LEFT
+		else if(this.pointContainedWithinRectangle(newX,newY,surfaceRectangle,surfacePosition) &&
+			this.pointContainedWithinRectangle(newX, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitVerticalSurface = true;
+		}
+		// RIGHT
+		else if (this.pointContainedWithinRectangle(newX + ballRectangle.width, newY, surfaceRectangle, surfacePosition) &&
+			this.pointContainedWithinRectangle(newX + ballRectangle.width, newY + ballRectangle.height, surfaceRectangle, surfacePosition))
+		{
+			hitVerticalSurface = true;
+		}
+		// when a single point intersects, we're moving diagonally, so it's a tie,
+		// choose randomly
+		else
+		{
+			if (this.randFromRange(1, 100) > 50)
+			{
+				hitVerticalSurface = true;
+			}
+			else
+			{
+				hitHorizontalSurface = true;
+			}
+		}
+
+		// if you hit vertical surface, change the x sign
+		// if you hit horizontal surface, change the y sign
+		//
+		//        -,+   0,+   +,+
+		//      0-----------------N
+		//      |       0,-       |
+		//  +,- |    -,-   +,-    | -,- 
+		//      |       \ /       |
+		//  +,0 | -,0    +    +,0 | -,0
+		//      |       / \       |
+		//  +,+ |    -,+   +,+    | +,-
+		//      |       0,+       |
+		//      N-----------------N
+		//        -,-   0,-   +,-
+
+		if (hitVerticalSurface)
+		{
+			ballVelocity.x *= -1;
+		}
+
+		if (hitHorizontalSurface)
+		{
+			ballVelocity.y *= -1;
+		}
+
+		//  paddle hit zones allow ball trajectory to vary somewhat
+		//   +--+  ^
+		//   |  | /
+		//   |  |   
+		//   |  |  -->
+		//   |  | 
+		//   |  | \
+		//   +--+  v
+
+		if (!!surface.components.Paddle)
+		{
+			var change = 0.4;
+			var xSign = ((ballVelocity.x / -1) > 0 ? -1 : 1);
+			var ySign = ((ballVelocity.y / -1) > 0 ? -1 : 1);
+
+			if (ballPosition.y < surfacePosition.y + (surfaceRectangle.height / 3) || ballPosition.y > surfacePosition.y + ((surfaceRectangle.height / 3) * 2))
+			{
+				// (constrain so you never decrease X to < 60% of absoluteSpeed)
+				var absoluteSpeed = Math.sqrt( Math.pow(ballVelocity.x,2) + Math.pow(ballVelocity.y,2));
+				var minX = Math.sqrt(Math.pow(absoluteSpeed,2) - Math.pow(absoluteSpeed * 0.4,2));
+
+				if (Math.abs(ballVelocity.x) - change > minX)
+				{
+					ballVelocity.x -= (change * xSign);
+					ballVelocity.y += (change * ySign);
+				}
+			}
+		}
+	},
+
+	pointContainedWithinRectangle : function(x,y, rectangle, rectanglePosition)
+	{
+		if(x >= rectanglePosition.x && 
+		   x <= rectanglePosition.x + rectangle.width &&
+		   y >= rectanglePosition.y &&
+		   y <= rectanglePosition.y + rectangle.height)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	},
+
+	centerPaddle: function(paddle, displayHeight)
+	{
+		paddle.components.Position.y = (displayHeight / 2) - (paddle.components.Rectangle.height / 2);
 	}
+
 };
