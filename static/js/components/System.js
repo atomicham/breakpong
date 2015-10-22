@@ -1,22 +1,18 @@
 var System = null;
 (function () {
-	var entities = [];
-	var systems = [];
 	System = Class.extend({
 		// in your base class constructor, identify the componentTypes, this system operates on
 		componentClasses: [],
 		intervalPeriod: 1000,
-		entities: [],
 		interval: null,
 		active: false,
 		
 		init: function (intervalPeriod) {
 			this.intervalPeriod = intervalPeriod;
-			systems.push(this);
 		},
 		
-		processEntities: function () {
-			this.before();
+		processEntities: function (entities) {
+		    this.before(entities);
 			
 			var length = entities.length;
 			for (var i = 0; i < length; i++) {
@@ -33,10 +29,10 @@ var System = null;
 			this.after();
 		},
 		
-		start: function () {
+		start: function (entities) {
 			var self = this;
 			self.interval = setInterval(function () {
-				self.processEntities();
+				self.processEntities(entities);
 			}, self.intervalPeriod);
 			this.active = true;
 		},
@@ -48,7 +44,7 @@ var System = null;
 		},
 		
 		// override this to implement special setup before processing all entities
-		before: function () { }, 
+		before: function (entities) { },
 		
 		// override this to do whatever your system does to the components it operates on
 		action: function (entity) { },
@@ -57,15 +53,15 @@ var System = null;
 		after: function () { }
 	});
 	
-	System.startSystems = function $startSystems() {
+	System.startSystems = function $startSystems(systems, entities) {
 		for (var system in systems) {
 			if (systems.hasOwnProperty(system) && !systems[system].active) {
-				systems[system].start();
+			    systems[system].start(entities);
 			}
 		}
 	};
 	
-	System.stopSystems = function $stopSystems() {
+	System.stopSystems = function $stopSystems(systems) {
 		for (var system in systems) {
 			if (systems.hasOwnProperty(system) && systems[system].active) {
 				systems[system].stop();
@@ -73,17 +69,17 @@ var System = null;
 		}
 	};
 	
-	System.createEntity = function $createEntity() {
+	System.createEntity = function $createEntity(entities) {
 		var entity = new Entity();
 		entities.push(entity);
 		return entity;
 	};
 	
-	System.getEntityCount = function $getEntityCount() {
+	System.getEntityCount = function $getEntityCount(entities) {
 		return entities.length;
 	};
 
-	System.getEntitiesWithComponents = function $getEntitiesWithComponents(components) {
+	System.getEntitiesWithComponents = function $getEntitiesWithComponents(entities, components) {
 		var qualified = [];
 		
 		if (!Array.isArray(components)) {
@@ -102,4 +98,5 @@ var System = null;
 
 		return qualified;
 	};
+
 }());

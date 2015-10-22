@@ -9,10 +9,10 @@ var PhysicsSystem = System.extend({
 		this._super(intervalPeriod);
 	},
 	
-	before: function () {
-		var count = System.getEntityCount();
+	before: function (entities) {
+	    var count = System.getEntityCount(entities);
 		if (this.trackedEntities != count) {
-			this.collidableEntities = System.getEntitiesWithComponents(["Position", "Rectangle", "Collidable"]);
+		    this.collidableEntities = System.getEntitiesWithComponents(entities, ["Position", "Rectangle", "Collidable"]);
 			this.trackedEntities = count;
 		}
 	},
