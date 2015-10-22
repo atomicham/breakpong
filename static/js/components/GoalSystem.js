@@ -7,10 +7,10 @@ var GoalSystem = System.extend({
 		this._super(interval);
 	},
 	
-	before: function () {
-		var count = System.getEntityCount();
+	before: function (entities) {
+	    var count = System.getEntityCount(entities);
 		if (this.trackedEntities != count) {
-			this.goalEntities = System.getEntitiesWithComponents(["GoalZone"]);
+		    this.goalEntities = System.getEntitiesWithComponents(entities, ["GoalZone"]);
 			this.trackedEntities = count;
 		}
 	},
