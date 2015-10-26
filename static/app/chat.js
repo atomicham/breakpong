@@ -7,7 +7,7 @@
 			sendMessage: function () {
 				var value = this.message;
 				if (!!value && !!value.trim()) {
-					socket.emit('client msg', value);
+					socket.emit('client msg', { user: $scope.user.name, text: value });
 					this.message = '';
 				}
 				return false;
@@ -18,8 +18,12 @@
 				}
 			},
 			addMessage: function (msg) {
+				var text = [];
+				text.push(msg.user);
+				text.push(": ");
+				text.push(msg.text);
 				$scope.$apply(function () {
-					$scope.chat.messages.push(msg);
+					$scope.chat.messages.push(text.join(""));
 				});
 			}
 		};

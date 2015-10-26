@@ -147,6 +147,10 @@ profile.param('id', function (req, res, next, value) {
 
 profile.get('/details', ensureLoggedIn('/login'), function (req, res) {
 	// return session id details.
+	res.send({
+		id: req.user.id, 
+		name: req.user.name
+	});
 });
 
 //add endpoint to update username

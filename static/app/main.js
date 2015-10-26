@@ -32,7 +32,7 @@ pongBreakApp.config(['$routeProvider', function ($routeProvider) {
 	});
 }]);
 
-pongBreakApp.controller('masterController', ['$scope', function pongBreakMasterController($scope) {
+pongBreakApp.controller('masterController', ['$scope', '$http', function pongBreakMasterController($scope, $http) {
 	$scope.toggleChat = function (show) {
 		if (show) {
 			$("#chatWindow").show();
@@ -40,6 +40,13 @@ pongBreakApp.controller('masterController', ['$scope', function pongBreakMasterC
 			$("#chatWindow").hide();
 		}
 	};
+
+	$scope.user = {};
+
+	$http.get('/profile/details').then(function (res) {
+		$scope.user = res.data;
+	});
+
 }]);
 
 pongBreakApp.controller('lobbyController', ['$scope', function pongBreakLobbyController($scope) {

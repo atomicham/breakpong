@@ -10,7 +10,7 @@
 		socket.broadcast.emit('serv usr conn', 'A user has connected.');
 
 		socket.on('client msg', function (msg) {
-			console.log('client msg sent: ' + msg);
+			console.log('client msg sent: ' + msg.user + ": " + msg.text);
 			socket.emit('serv msg', msg);
 		});
 		

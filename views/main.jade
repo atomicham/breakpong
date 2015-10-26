@@ -10,12 +10,12 @@ block scripts
   script(type="text/javascript" src="static/app/main.js")
 
 block content
-  div.viewArea(ng-app="pongBreakApp" ng-controller="masterController" ng-init="$scope.user = '#{user}'")
+  div.viewArea(ng-app="pongBreakApp" ng-controller="masterController")
     ul.menu
       li
         a(href="#/lobby") Lobby
-      li
-        a(href="#/account") Account [{{$scope.user}}]
+      li(ng-hide="!user.name") 
+        a(href="#/account") Account [{{ user.name }}]
       li
         a(href="#/game") Game
     div(ng-view)

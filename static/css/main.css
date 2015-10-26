@@ -45,6 +45,7 @@ body {
 	margin: 0 auto;
 	min-height: 300px;
 	width: 100%;
+	color: black;
 	background-color: lightgray;
 	font-family: sans-serif;
 }
