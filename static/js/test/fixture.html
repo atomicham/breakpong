@@ -16,16 +16,28 @@
 	<script type="text/javascript" src="../../js/components/GoalSystem.js"></script>
     <script type="text/javascript" src="../../js/components/PhysicsSystem.js"></script>
     <script type="text/javascript" src="../../js/components/KeyboardPaddleSystem.js"></script>
+    <script type="text/javascript" src="../../js/components/MessageQueue.js"></script>
     <script type="text/javascript" src="../../js/components/GameEngine.js"></script>
     <script type="text/javascript">
+
+        var UP_ARROW = 38;
+        var DOWN_ARROW = 40;
+        var w_KEY = 87;
+        var s_KEY = 83;
+
+        var channels = ["" , "" ];
+
         jQuery(document).ready(function () {
-            var game = new GameEngine("gameContainer");
+            var game = new GameEngine("gameContainer", channels, 0, 1, UP_ARROW, DOWN_ARROW, true);
             game.start();
+            var game2 = new GameEngine("game2Container", channels, 1, 0, w_KEY, s_KEY, false);
+            game2.start();
         });
     </script>
 
 </head>
 <body>
     <div id="gameContainer"></div>
+    <div id="game2Container"></div>
 </body>
 </html>
