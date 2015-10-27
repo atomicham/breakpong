@@ -1,6 +1,6 @@
 body {
 	width: 100%;
-	background-color:black;
+	background-color: black;
 	color: white;
 	font-family: 'Share Tech Mono';
 }
@@ -13,8 +13,25 @@ body {
 		display: inline;
 	}
 
-	.menu li + li:before {
-		content: " | ";
+		.menu li + li:before {
+			content: " | ";
+		}
+
+avatar {
+	margin: 0 3px 0 3px;
+	width: 50px;
+	height: 50px;
+	padding: 2px;
+}
+
+	avatar div {
+		width: 100%;
+		height: 100%;
+	}
+
+	avatar .profileImg {
+		width: 100%;
+		height: 100%;
 	}
 
 .viewArea {
@@ -23,15 +40,48 @@ body {
 	min-width: 500px;
 }
 
+.lobby {
+	height: 500px;
+}
+
+div#lobbyOptions {
+	height: 50px;
+}
+
+div#gameList {
+	height: 15em;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+	div#gameList .gamelisting {
+		height: 5em;
+		background: black;
+		border: 1px solid white;
+		clear: both;
+	}
+
+		div#gameList .gamelisting avatar {
+			float: left;
+		}
+
+	div#gameList .gametype {
+		float: right;
+	}
+
+	div#gameList .playercounter {
+		float: left;
+	}
+
 .game {
 	height: 360px;
 	width: 100%;
 }
 
-.game canvas {
-	margin: 0 auto;
-	width: 640px;
-}
+	.game canvas {
+		margin: 0 auto;
+		width: 640px;
+	}
 
 .lobby {
 	height: 360px;

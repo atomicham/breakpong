@@ -1,4 +1,4 @@
-﻿var pongBreakApp = angular.module('pongBreakApp', ['ngRoute', 'chatModule']);
+﻿var pongBreakApp = angular.module('pongBreakApp', ['ngRoute', 'chatModule', 'lobbyModule']);
 
 pongBreakApp.directive('script', function ($parse, $rootScope, $compile) {
 	return {
@@ -17,7 +17,8 @@ pongBreakApp.config(['$routeProvider', function ($routeProvider) {
 	$routeProvider.
 	when('/lobby', {
 		templateUrl: 'static/app/views/lobby.html',
-		controller: 'lobbyController'
+		controller: 'lobbyController',
+		controllerAs: 'lobby'
 	})
 	.when('/account', {
 		templateUrl: 'static/app/views/account.html',
@@ -47,10 +48,6 @@ pongBreakApp.controller('masterController', ['$scope', '$http', function pongBre
 		$scope.user = res.data;
 	});
 
-}]);
-
-pongBreakApp.controller('lobbyController', ['$scope', function pongBreakLobbyController($scope) {
-	$scope.toggleChat(true);
 }]);
 
 pongBreakApp.controller('gameController', ['$scope', function pongBreakLobbyController($scope) {

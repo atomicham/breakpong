@@ -1,13 +1,20 @@
 ﻿<div class="lobby">
-	<h1>Lobby</h1>
-	<ul>
-		<li>Game Creation</li>
-		<li>
-			Matchmaking Controls
-			<ul>
-				<li>Public Games</li>
-				<li>Private Games</li>
-			</ul>
-		</li>
-	</ul>
+	<h1>{{lobby.lobbyName}}</h1>
+	<div>
+		<ul>
+			<li>Create Game</li>
+			<li>Join Game</li>
+		</ul>
+	</div>
+	<div id="gameList">
+		<div class="gamelisting" ng-repeat="game in lobby.games">
+			<div class="gametype">{{game.id}} : {{game.info.type}}</div>
+			<players game="{{game.info.type}}">
+				<div class="playercounter">{{game.players.length}} of {{game.info.maxPlayers}} Players</div>
+				<ul ng-if="game.players.length > 0" ng-repeat="player in game.players">
+					<avatar name="player"></avatar>
+				</ul>
+			</players>
+		</div>
+	</div>
 </div>
