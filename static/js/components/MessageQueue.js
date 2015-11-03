@@ -87,12 +87,12 @@ var MessageQueue = System.extend({
         var result = JSON.parse(response);
         this.flipCoordinates(result);
 
-        var midX = this.displayWidth / 2;
+        var midX = this.leftPlayerPaddleEntity.components.Position.x + this.leftPlayerPaddleEntity.components.Rectangle.width;
         var p1Ball = result["ball"];
         var p1Paddle = result["paddle"];
         var p1Score = result["score"];
 
-        if (p1Ball.components.Position.x < midX - 5 || (this.ballEntity.components.Velocity.x == 0 && this.ballEntity.components.Velocity.y == 0)) {
+        if (p1Ball.components.Position.x <= midX || (this.ballEntity.components.Velocity.x == 0 && this.ballEntity.components.Velocity.y == 0)) {
             this.ballEntity.components.Position = p1Ball.components.Position;
             this.ballEntity.components.Velocity = p1Ball.components.Velocity;
         }

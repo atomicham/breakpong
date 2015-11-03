@@ -5,9 +5,9 @@ var GameEngine = Class.extend({
 	physicsUpdateInterval : 10,
 	displayUpdateInterval: 40,
 	paddleUpdateInterval: 10,
-	paddleMotionIncrement: 3,
+	paddleMotionIncrement: 2,
 	wallThickness: 4,
-	ballSpeed: 3,
+	ballSpeed: 5,
 	scoreY : 35,
 	canvasContainer: null,
 	p1Paddle: null,
@@ -178,18 +178,25 @@ var GameHelper = {
 		ballPosition.y = this.randFromRange(rectanglePosition.y + protectiveYSetback, rectanglePosition.y + rectangle.height + (ballRectangle.height * xStartDirection) - protectiveYSetback);
 
 		// starting velocity 
-		// x determined randomly
+	    // x determined randomly
+
+		var step = desiredSpeed / 10; 
+		var table = {};
+
+		var count = 0;
+		for (var i = 5; i < 10; i++) {
+		    var entry = { x: (i * step), y: desiredSpeed - (i * step) };
+		    table[count++] = entry;
+		}
+
+		var randIndex = this.randFromRange(0,4);
 		// make sure that x velocity accounts for at least 60% (serves have more forward motion than vertical motion)
 		//ballVelocity.x = this.randFromRange(desiredSpeed - (desiredSpeed * 0.3), desiredSpeed - (desiredSpeed * 0.1));
-		ballVelocity.x = 3 * xStartDirection;
-		ballVelocity.y = 1.5 * yStartDirection;
+		ballVelocity.x = table[randIndex].x * xStartDirection;
+		ballVelocity.y = table[randIndex].y * yStartDirection;
 
-		// y velocity calculated to ensure desired speed is maintained.
-		//var speedSquared = Math.pow(desiredSpeed, 2);
-		//var xSquared = Math.pow(ballVelocity.x, 2);
-		//ballVelocity.y = Math.sqrt(speedSquared - xSquared);
 
-		// apply direction
+		// apply X direction
 		ballVelocity.x *= xStartDirection;
 	},
 
@@ -250,18 +257,9 @@ var GameHelper = {
 		{
 			hitVerticalSurface = true;
 		}
-		// when a single point intersects, we're moving diagonally, so it's a tie,
-		// choose randomly
 		else
 		{
-			if (this.randFromRange(1, 100) > 50)
-			{
-				hitVerticalSurface = true;
-			}
-			else
-			{
-				hitHorizontalSurface = true;
-			}
+		    hitVerticalSurface = true;
 		}
 
 		// if you hit vertical surface, change the x sign
