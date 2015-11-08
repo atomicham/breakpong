@@ -1,0 +1,3 @@
+
+var Component = Class.extend({});
+
