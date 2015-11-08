@@ -1,6 +1,7 @@
 var System = null;
 (function () {
-	System = Class.extend({
+    System = Class.extend({
+        systemType : "System",
 		// in your base class constructor, identify the componentTypes, this system operates on
 		componentClasses: [],
 		intervalPeriod: 1000,
@@ -28,13 +29,35 @@ var System = null;
 
 			this.after();
 		},
+
+		getEntityWithComponent: function (entities, componentName)
+        {
+		    for (var i in entities)
+		    {
+		        var entity = entities[i];
+		        for (var j in entity.components)
+		        {
+		            var component = entity.components[j];
+		            if (component.name === componentName)
+		            {
+		                return component;
+		            }
+		        }
+		    }
+		},
 		
 		start: function (entities) {
+
+		    if (this.interval)
+		    {
+		        clearInterval(this.interval);
+		    }
+
 			var self = this;
-			self.interval = setInterval(function () {
-				self.processEntities(entities);
-			}, self.intervalPeriod);
-			this.active = true;
+		    self.interval = setInterval(function () {
+		        self.processEntities(entities);
+		    }, self.intervalPeriod);
+		    this.active = true;
 		},
 		
 		stop: function () {

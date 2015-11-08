@@ -1,18 +1,21 @@
 
 
-var DisplaySystem = System.extend({
+var PongDisplaySystem = System.extend({
 	displayWidth: 0, 
 	displayHeight: 0,
 	canvasContainer: null,
 	canvas: null,
+	systemType: "Display",
+    intervalPeriod : 40,
 	
-	init: function (intervalPeriod, canvasContainer, displayWidth, displayHeight) {
-		this.displayWidth = displayWidth;
-		this.displayHeight = displayHeight;
-		this.canvasContainer = canvasContainer;
+    init: function (entities) {
+        var canvas = this.getEntityWithComponent(entities, "Canvas");
+		this.displayWidth = canvas.width;
+		this.displayHeight = canvas.height;
+		this.canvasContainer = canvas.canvasElement;
 		this.canvas = new TwoDCanvas(this.canvasContainer, this.displayWidth, this.displayHeight);
 		this.componentClasses = ["Position", "Color"];
-		this._super(intervalPeriod);
+		this._super(this.intervalPeriod);
 	},
 	
 	before: function () {
@@ -72,8 +75,12 @@ var DisplaySystem = System.extend({
 			if (entity.hasComponent('Score')) {
 				text = entity.components.Score.value;
 			}
+			else if (entity.components.Text.value)
+			{
+			    text = entity.components.Text.value;
+			}
             // TODO: make font, size Text properties
-			this.canvas.drawText(text, '30px "Share Tech Mono"', entity.components.Color.color, entity.components.Position.x, entity.components.Position.y);
+			this.canvas.drawText(text, entity.components.Text.font, entity.components.Color.color, entity.components.Position.x, entity.components.Position.y);
 		}
 	},
 });

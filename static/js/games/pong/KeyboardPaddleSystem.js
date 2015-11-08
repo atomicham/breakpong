@@ -1,11 +1,13 @@
 
 var KeyboardPaddleSystem = System.extend({
-	
-	init: function (intervalPeriod) {
+    systemType: "KeyboardPaddle",
+    intervalPeriod: 2,
+
+	init: function () {
 		KeyboardPaddleSystem.prototype.pressedkeys = [];
 		this.componentClasses = ["KeyControlledPaddle"];
 		this.setupEvents();
-		this._super(intervalPeriod);
+		this._super(this.intervalPeriod);
 	},
 	
 	action: function (entity) {

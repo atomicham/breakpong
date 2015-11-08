@@ -3,41 +3,94 @@
 <head>
 <title>Gameplay Test Fixture</title>
     <meta charset="utf-8" />
-    <title>PongBreak</title>
+
     <link rel="stylesheet" href="../../css/main.css" />
     <link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+    
+    <!-- Third-party -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="../../js/tp/Simple.js"></script>
-    <script type="text/javascript" src="../../js/components/TwoDCanvas.js"></script>
-    <script type="text/javascript" src="../../js/components/Entity.js"></script>
+
+    <!-- Support libraries -->
+    <script type="text/javascript" src="../../js/support/TwoDCanvas.js"></script>
+    <script type="text/javascript" src="../../js/support/CommChannel.js"></script>
+    <script type="text/javascript" src="../../js/support/LoopbackCommChannel.js"></script>
+        
+    <!-- Base Engine includes -->   
+    <script type="text/javascript" src="../../js/engine/Entity.js"></script>
+    <script type="text/javascript" src="../../js/engine/Game.js"></script>
+    <script type="text/javascript" src="../../js/engine/GameEngine.js"></script>
     <script type="text/javascript" src="../../js/components/Component.js"></script>
-    <script type="text/javascript" src="../../js/components/System.js"></script>
-	<script type="text/javascript" src="../../js/components/DisplaySystem.js"></script>
-	<script type="text/javascript" src="../../js/components/GoalSystem.js"></script>
-    <script type="text/javascript" src="../../js/components/PhysicsSystem.js"></script>
-    <script type="text/javascript" src="../../js/components/KeyboardPaddleSystem.js"></script>
-    <script type="text/javascript" src="../../js/components/MessageQueue.js"></script>
-    <script type="text/javascript" src="../../js/components/GameEngine.js"></script>
+    <script type="text/javascript" src="../../js/systems/System.js"></script>
+    <script type="text/javascript" src="../../js/components/VelocityComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/RectangleComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/TextComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/PositionComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/DashedLineComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/ColorComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/CollidableComponent.js"></script>
+    <script type="text/javascript" src="../../js/components/CanvasComponent.js"></script>
+
+    <!-- Game-specific -->
+    <script type="text/javascript" src="../../js/games/pong/PongGame.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/GoalZoneComponent.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/BallComponent.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/ScoreComponent.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/PaddleComponent.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/KeyControlledPaddleComponent.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/KeyboardPaddleSystem.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/GoalSystem.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/PongDisplaySystem.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/PongPhysicsSystem.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/PongUpdateSystem.js"></script>
+    <script type="text/javascript" src="../../js/games/pong/PongAIGameEngine.js"></script>
+    
+    <!-- Bootstrap -->
     <script type="text/javascript">
-
-        var UP_ARROW = 38;
-        var DOWN_ARROW = 40;
-        var w_KEY = 87;
-        var s_KEY = 83;
-
-        var channels = ["" , "" ];
-
+        var aiEngine = null;
+        var gameEngine = null;
         jQuery(document).ready(function () {
-            var game = new GameEngine("gameContainer", channels, 0, 1, UP_ARROW, DOWN_ARROW, true);
-            game.start();
-            var game2 = new GameEngine("game2Container", channels, 1, 0, w_KEY, s_KEY, false);
-            game2.start();
+            var game = new PongGame({ element: "gameContainer", width: 640, height: 300 });
+            gameEngine = new GameEngine(game);
+            jQuery("#startButton").css('display', 'block');
         });
+
+        function startAIGame()
+        {
+            jQuery("#startButton").css('display', 'none');
+            var aiCommChannel = new LoopbackCommChannel();
+            var humanCommChannel = new LoopbackCommChannel();
+            aiCommChannel.setPeer(humanCommChannel);
+            humanCommChannel.setPeer(aiCommChannel);
+
+            var game2 = new PongGame({ element: "gameContainer2", width: 640, height: 300 });
+            // set flag to true to show AI display
+            var aiEngine = new PongAIEngine(game2, false);
+            aiEngine.setCommChannel(aiCommChannel);
+
+            gameEngine.setCommChannel(humanCommChannel);
+            aiEngine.start();
+            gameEngine.start();
+        }
+
+        function startRemoteHumanGame() {
+            jQuery("#startButton").css('display', 'none');
+            var commChannel = new CommChannel(document.getElementById("serverSelection").value);
+            gameEngine.setCommChannel(commChannel);
+            gameEngine.start();
+        }
     </script>
 
 </head>
 <body>
-    <div id="gameContainer"></div>
-    <div id="game2Container"></div>
+    <div id="gameContainer"></div> &nbsp; &nbsp; <div id="gameContainer2"></div>
+    <br>
+    <div id="startButton" style="display:none">
+        <input type="button" value="Play AI" onclick="startAIGame();"><br>
+        <input type="button" value="Play Human" onclick="startRemoteHumanGame();"><br>
+        <input id="serverSelection" type="text" value="/server">
+    </div>
+
+
 </body>
 </html>

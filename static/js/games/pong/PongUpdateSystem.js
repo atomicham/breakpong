@@ -1,8 +1,5 @@
 
-var MessageQueue = System.extend({
-    channels: null, 
-    inQueue: 0, 
-    outQueue: 0,
+var PongUpdateSystem = System.extend({
     values: null,
     displayWidth : 0,
     ballEntity: null, 
@@ -10,21 +7,21 @@ var MessageQueue = System.extend({
     leftPlayerScoreEntity : null,
     rightPlayerPaddleEntity: null,
     rightPlayerScoreEntity: null,
-    initialized : false,
+    initialized: false,
+    intervalPeriod: 40,
+    game : null,
 
-    init: function (intervalPeriod, displayWidth, channels, inQueue, outQueue)
+    init: function (game)
     {
-        this.displayWidth = displayWidth;
-        this.channels=channels, 
-        this.inQueue=inQueue, 
-        this.outQueue = outQueue
-        this._super(intervalPeriod);
+        this.game = game;
+        this.displayWidth = game.width;
+        this._super(this.intervalPeriod);
     },
 
     before: function () {
         if (this.initialized)
         {
-            this.channels[this.outQueue] = this.stringifyMyState();
+            this.game.commChannel.write(this.stringifyMyState());
         }
     },
 
@@ -55,8 +52,9 @@ var MessageQueue = System.extend({
     },
 
     after: function () {
-        if (this.channels[this.inQueue]) {
-            this.parseTheirState(this.channels[this.inQueue]);
+        var message = this.game.commChannel.read();
+        if (message) {
+            this.parseTheirState(message);
         }
         this.initialized = true;
     },
@@ -87,12 +85,12 @@ var MessageQueue = System.extend({
         var result = JSON.parse(response);
         this.flipCoordinates(result);
 
-        var midX = this.leftPlayerPaddleEntity.components.Position.x + this.leftPlayerPaddleEntity.components.Rectangle.width;
+        var horizon = this.leftPlayerPaddleEntity.components.Position.x + this.leftPlayerPaddleEntity.components.Rectangle.width;
         var p1Ball = result["ball"];
         var p1Paddle = result["paddle"];
         var p1Score = result["score"];
 
-        if (p1Ball.components.Position.x <= midX || (this.ballEntity.components.Velocity.x == 0 && this.ballEntity.components.Velocity.y == 0)) {
+        if (p1Ball.components.Position.x <= horizon || (this.ballEntity.components.Velocity.x == 0 && this.ballEntity.components.Velocity.y == 0)) {
             this.ballEntity.components.Position = p1Ball.components.Position;
             this.ballEntity.components.Velocity = p1Ball.components.Velocity;
         }

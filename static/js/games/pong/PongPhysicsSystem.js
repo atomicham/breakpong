@@ -1,12 +1,15 @@
 
-var PhysicsSystem = System.extend({
+var PongPhysicsSystem = System.extend({
+    systemType: "Physics",
+    collidableEntites: [],
+    intervalPeriod: 20,
+    game : null,
 	
-	collidableEntites: [],
-	
-	init: function (intervalPeriod) {
+    init: function (game) {
+        this.game = game;
 		this.componentClasses = ["Position", "Rectangle", "Velocity"];
 		this.trackedEntities = 0;
-		this._super(intervalPeriod);
+		this._super(this.intervalPeriod);
 	},
 	
 	before: function (entities) {
@@ -29,12 +32,12 @@ var PhysicsSystem = System.extend({
 			for (var id in this.collidableEntities)
 			{
 				if (entity != this.collidableEntities[id] &&
-					!GameHelper.passthru(entity, this.collidableEntities[id]) &&
-					GameHelper.overlap(newX, newY, entity.components.Rectangle, this.collidableEntities[id]))
+					!this.game.passthru(entity, this.collidableEntities[id]) &&
+					this.game.overlap(newX, newY, entity.components.Rectangle, this.collidableEntities[id]))
 				{
 					if (!!entity.components.Ball)
 					{
-						GameHelper.bounce(newX, newY, entity, this.collidableEntities[id]);
+						this.game.bounce(newX, newY, entity, this.collidableEntities[id]);
 					}
 					collided = true;
 				}
